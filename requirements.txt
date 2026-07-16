@@ -1,6 +1,6 @@
 fastapi
 uvicorn[standard]
 scikit-learn 
-lightgbmpython -c "import joblib; m = joblib.load('best_model_LightGBM.joblib'); print(type(m))"
+lightgbm
 joblib
 numpy

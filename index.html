@@ -1,0 +1,412 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Signal Check — Account Authenticity Scanner</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg: #10131A;
+    --panel: #161A24;
+    --panel-line: #262C3A;
+    --text: #E7E5DD;
+    --text-dim: #8A8F9E;
+    --accent-cyan: #4FD1C5;
+    --accent-amber: #D9A441;
+    --accent-red: #E2645A;
+    --mono: 'IBM Plex Mono', monospace;
+    --grotesk: 'Space Grotesk', sans-serif;
+  }
+  *{box-sizing:border-box;}
+  body{
+    margin:0;
+    background:
+      radial-gradient(ellipse at top left, rgba(79,209,197,0.06), transparent 55%),
+      var(--bg);
+    color:var(--text);
+    font-family:var(--grotesk);
+    min-height:100vh;
+  }
+  .wrap{max-width:1080px;margin:0 auto;padding:56px 24px 80px;}
+
+  header{margin-bottom:48px;}
+  .eyebrow{
+    font-family:var(--mono);
+    font-size:12px;
+    letter-spacing:0.14em;
+    text-transform:uppercase;
+    color:var(--accent-cyan);
+    display:flex;align-items:center;gap:10px;
+    margin-bottom:14px;
+  }
+  .eyebrow::before{
+    content:"";
+    width:7px;height:7px;border-radius:50%;
+    background:var(--accent-cyan);
+    box-shadow:0 0 8px var(--accent-cyan);
+  }
+  h1{
+    font-size:clamp(28px,4vw,42px);
+    font-weight:600;
+    margin:0 0 10px;
+    letter-spacing:-0.01em;
+  }
+  header p{
+    color:var(--text-dim);
+    font-size:15px;
+    max-width:560px;
+    line-height:1.6;
+    margin:0;
+  }
+
+  .grid{
+    display:grid;
+    grid-template-columns:1.15fr 0.85fr;
+    gap:24px;
+  }
+  @media (max-width:860px){ .grid{grid-template-columns:1fr;} }
+
+  .panel{
+    background:var(--panel);
+    border:1px solid var(--panel-line);
+    border-radius:10px;
+    padding:28px;
+  }
+  .panel h2{
+    font-size:13px;
+    font-family:var(--mono);
+    text-transform:uppercase;
+    letter-spacing:0.1em;
+    color:var(--text-dim);
+    margin:0 0 22px;
+    font-weight:500;
+  }
+
+  form{display:grid;grid-template-columns:1fr 1fr;gap:16px 18px;}
+  .field{display:flex;flex-direction:column;gap:6px;}
+  .field.full{grid-column:1/-1;}
+  label{
+    font-size:12px;
+    color:var(--text-dim);
+    font-family:var(--mono);
+  }
+  input, select{
+    background:#0D1017;
+    border:1px solid var(--panel-line);
+    color:var(--text);
+    padding:9px 11px;
+    border-radius:6px;
+    font-family:var(--mono);
+    font-size:13px;
+    outline:none;
+    transition:border-color .15s;
+  }
+  input:focus, select:focus{border-color:var(--accent-cyan);}
+  .checkbox-row{
+    display:flex;align-items:center;gap:8px;
+    flex-direction:row;
+    padding-top:4px;
+  }
+  .checkbox-row input{width:16px;height:16px;padding:0;accent-color:var(--accent-cyan);}
+  .checkbox-row label{font-size:12.5px;color:var(--text);}
+
+  button{
+    grid-column:1/-1;
+    margin-top:6px;
+    background:var(--accent-cyan);
+    color:#0D1017;
+    border:none;
+    padding:13px;
+    border-radius:6px;
+    font-family:var(--mono);
+    font-size:13px;
+    font-weight:600;
+    letter-spacing:0.04em;
+    text-transform:uppercase;
+    cursor:pointer;
+    transition:filter .15s, transform .1s;
+  }
+  button:hover{filter:brightness(1.08);}
+  button:active{transform:scale(0.99);}
+  button:disabled{opacity:0.5;cursor:not-allowed;}
+
+  /* --- Result panel / gauge --- */
+  .result-panel{display:flex;flex-direction:column;align-items:center;text-align:center;}
+  .gauge-wrap{position:relative;width:200px;height:200px;margin:6px 0 18px;}
+  svg{overflow:visible;}
+  .gauge-bg{fill:none;stroke:var(--panel-line);stroke-width:10;}
+  .gauge-fill{
+    fill:none;stroke-width:10;stroke-linecap:round;
+    stroke-dasharray:439.8;
+    stroke-dashoffset:439.8;
+    transition:stroke-dashoffset 1.1s cubic-bezier(.4,0,.2,1), stroke 1.1s ease;
+  }
+  .gauge-center{
+    position:absolute;inset:0;
+    display:flex;flex-direction:column;align-items:center;justify-content:center;
+  }
+  .gauge-score{font-family:var(--mono);font-size:38px;font-weight:600;}
+  .gauge-label{font-family:var(--mono);font-size:10px;color:var(--text-dim);text-transform:uppercase;letter-spacing:0.1em;margin-top:2px;}
+
+  .verdict{
+    font-family:var(--mono);
+    font-size:14px;
+    font-weight:600;
+    letter-spacing:0.06em;
+    text-transform:uppercase;
+    padding:6px 14px;
+    border-radius:20px;
+    margin-bottom:22px;
+    border:1px solid;
+  }
+  .verdict.authentic{color:var(--accent-cyan);border-color:var(--accent-cyan);background:rgba(79,209,197,0.08);}
+  .verdict.suspicious{color:var(--accent-red);border-color:var(--accent-red);background:rgba(226,101,90,0.08);}
+
+  .placeholder{
+    color:var(--text-dim);
+    font-family:var(--mono);
+    font-size:12.5px;
+    line-height:1.7;
+    padding:30px 10px;
+  }
+
+  .breakdown{width:100%;text-align:left;margin-top:6px;}
+  .breakdown-row{
+    display:flex;justify-content:space-between;
+    padding:8px 0;
+    border-bottom:1px solid var(--panel-line);
+    font-family:var(--mono);
+    font-size:12px;
+  }
+  .breakdown-row:last-child{border-bottom:none;}
+  .breakdown-row span:first-child{color:var(--text-dim);}
+
+  .error-msg{
+    color:var(--accent-red);
+    font-family:var(--mono);
+    font-size:12.5px;
+    text-align:center;
+    padding:20px 10px;
+    line-height:1.6;
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <header>
+    <div class="eyebrow">signal check</div>
+    <h1>Account authenticity scanner</h1>
+    <p>Enter an account's behavioral signals to estimate the likelihood it's an inauthentic or automated account. Scored by a LightGBM classifier trained on platform activity patterns.</p>
+  </header>
+
+  <div class="grid">
+
+    <div class="panel">
+      <h2>Input signals</h2>
+      <form id="scan-form">
+
+        <div class="field">
+          <label for="platform">Platform</label>
+          <select id="platform">
+            <option value="instagram">Instagram</option>
+            <option value="tiktok">TikTok</option>
+            <option value="twitter">Twitter / X</option>
+          </select>
+        </div>
+
+        <div class="field">
+          <label for="account_age_days">Account age (days)</label>
+          <input type="number" id="account_age_days" value="365" required>
+        </div>
+
+        <div class="field">
+          <label for="follower_count">Follower count</label>
+          <input type="number" id="follower_count" value="500" required>
+        </div>
+
+        <div class="field">
+          <label for="following_count">Following count</label>
+          <input type="number" id="following_count" value="300" required>
+        </div>
+
+        <div class="field">
+          <label for="bio_length">Bio length (chars)</label>
+          <input type="number" id="bio_length" value="50" required>
+        </div>
+
+        <div class="field">
+          <label for="username_length">Username length</label>
+          <input type="number" id="username_length" value="12" required>
+        </div>
+
+        <div class="field">
+          <label for="username_digit_ratio">Username digit ratio (0–1)</label>
+          <input type="number" step="0.01" min="0" max="1" id="username_digit_ratio" value="0.1" required>
+        </div>
+
+        <div class="field">
+          <label for="profile_completeness">Profile completeness (0–1)</label>
+          <input type="number" step="0.01" min="0" max="1" id="profile_completeness" value="0.8" required>
+        </div>
+
+        <div class="field">
+          <label for="posts_per_day_avg">Avg posts / day</label>
+          <input type="number" step="0.1" id="posts_per_day_avg" value="1.5" required>
+        </div>
+
+        <div class="field">
+          <label for="pct_posts_duplicate_content">Duplicate content ratio (0–1)</label>
+          <input type="number" step="0.01" min="0" max="1" id="pct_posts_duplicate_content" value="0.05" required>
+        </div>
+
+        <div class="field">
+          <label for="avg_time_between_posts_min">Avg time between posts (min)</label>
+          <input type="number" id="avg_time_between_posts_min" value="120" required>
+        </div>
+
+        <div class="field">
+          <label for="device_fingerprint_diversity">Device fingerprint diversity</label>
+          <input type="number" step="0.1" id="device_fingerprint_diversity" value="3" required>
+        </div>
+
+        <div class="field full checkbox-row">
+          <input type="checkbox" id="has_profile_picture" checked>
+          <label for="has_profile_picture">Has profile picture</label>
+        </div>
+        <div class="field full checkbox-row">
+          <input type="checkbox" id="is_default_avatar">
+          <label for="is_default_avatar">Using default avatar</label>
+        </div>
+        <div class="field full checkbox-row">
+          <input type="checkbox" id="has_bio" checked>
+          <label for="has_bio">Has bio</label>
+        </div>
+        <div class="field full checkbox-row">
+          <input type="checkbox" id="is_verified">
+          <label for="is_verified">Verified account</label>
+        </div>
+
+        <button type="submit" id="submit-btn">Run scan</button>
+      </form>
+    </div>
+
+    <div class="panel result-panel">
+      <h2 style="align-self:flex-start;">Scan result</h2>
+      <div id="result-content" style="width:100%;">
+        <div class="placeholder">
+          Fill in the signals and run a scan.<br>Results appear here.
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<script>
+const API_URL = "http://localhost:8000/predict";
+
+const form = document.getElementById("scan-form");
+const submitBtn = document.getElementById("submit-btn");
+const resultContent = document.getElementById("result-content");
+
+function gaugeSVG(scorePct, colorVar){
+  const radius = 70;
+  const circumference = 2 * Math.PI * radius;
+  const offset = circumference - (scorePct/100) * circumference;
+  return `
+  <div class="gauge-wrap">
+    <svg width="200" height="200" viewBox="0 0 200 200">
+      <circle class="gauge-bg" cx="100" cy="100" r="${radius}"></circle>
+      <circle class="gauge-fill" id="gauge-fill" cx="100" cy="100" r="${radius}"
+        stroke="${colorVar}"
+        transform="rotate(-90 100 100)"></circle>
+    </svg>
+    <div class="gauge-center">
+      <div class="gauge-score">${scorePct}%</div>
+      <div class="gauge-label">bot likelihood</div>
+    </div>
+  </div>`;
+}
+
+form.addEventListener("submit", async (e) => {
+  e.preventDefault();
+  submitBtn.disabled = true;
+  submitBtn.textContent = "Scanning...";
+  resultContent.innerHTML = `<div class="placeholder">Running model inference...</div>`;
+
+  const payload = {
+    platform: document.getElementById("platform").value,
+    account_age_days: parseFloat(document.getElementById("account_age_days").value),
+    has_profile_picture: document.getElementById("has_profile_picture").checked ? 1 : 0,
+    is_default_avatar: document.getElementById("is_default_avatar").checked ? 1 : 0,
+    bio_length: parseFloat(document.getElementById("bio_length").value),
+    has_bio: document.getElementById("has_bio").checked ? 1 : 0,
+    username_digit_ratio: parseFloat(document.getElementById("username_digit_ratio").value),
+    username_length: parseFloat(document.getElementById("username_length").value),
+    follower_count: parseFloat(document.getElementById("follower_count").value),
+    following_count: parseFloat(document.getElementById("following_count").value),
+    is_verified: document.getElementById("is_verified").checked ? 1 : 0,
+    profile_completeness: parseFloat(document.getElementById("profile_completeness").value),
+    posts_per_day_avg: parseFloat(document.getElementById("posts_per_day_avg").value),
+    pct_posts_duplicate_content: parseFloat(document.getElementById("pct_posts_duplicate_content").value),
+    avg_time_between_posts_min: parseFloat(document.getElementById("avg_time_between_posts_min").value),
+    device_fingerprint_diversity: parseFloat(document.getElementById("device_fingerprint_diversity").value),
+  };
+
+  try {
+    const res = await fetch(API_URL, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(payload),
+    });
+
+    if (!res.ok) {
+      const errText = await res.text();
+      throw new Error(errText || "Request failed");
+    }
+
+    const data = await res.json();
+    const prediction = data.prediction;
+    const probs = data.probabilities || null;
+
+    // Assume class 1 = bot/fake, class 0 = authentic (adjust if your labels differ)
+    const botProb = probs ? probs[1] ?? probs[probs.length - 1] : (prediction === 1 ? 1 : 0);
+    const scorePct = Math.round(botProb * 100);
+    const isSuspicious = prediction === 1;
+
+    const color = isSuspicious ? "var(--accent-red)" : "var(--accent-cyan)";
+    const verdictClass = isSuspicious ? "suspicious" : "authentic";
+    const verdictText = isSuspicious ? "Likely inauthentic" : "Likely authentic";
+
+    resultContent.innerHTML = `
+      <div class="verdict ${verdictClass}">${verdictText}</div>
+      ${gaugeSVG(scorePct, color)}
+      ${probs ? `
+      <div class="breakdown">
+        <div class="breakdown-row"><span>P(authentic)</span><span>${(probs[0]*100).toFixed(1)}%</span></div>
+        <div class="breakdown-row"><span>P(bot / fake)</span><span>${(probs[1]*100).toFixed(1)}%</span></div>
+      </div>` : ""}
+    `;
+
+    // trigger gauge fill animation
+    requestAnimationFrame(() => {
+      const fill = document.getElementById("gauge-fill");
+      const circumference = 2 * Math.PI * 70;
+      const offset = circumference - (scorePct/100) * circumference;
+      fill.style.strokeDashoffset = offset;
+    });
+
+  } catch (err) {
+    resultContent.innerHTML = `<div class="error-msg">Couldn't reach the model API.<br>Make sure the backend is running at<br><b>${API_URL}</b><br><br>${err.message}</div>`;
+    console.error(err);
+  } finally {
+    submitBtn.disabled = false;
+    submitBtn.textContent = "Run scan";
+  }
+});
+</script>
+</body>
+</html>

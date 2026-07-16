@@ -1,5 +1,5 @@
 // frontend/script.js
-const API_URL = "https://ideaforge-7cpk.onrender.com"; // change to your deployed backend URL
+const API_URL = "https://ideaforge-7cpk.onrender.com/predict"; // change to your deployed backend URL
 
 const form = document.getElementById('scanForm');
 const result = document.getElementById('result');

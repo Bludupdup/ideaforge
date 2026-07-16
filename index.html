@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Social Detective 🔍 </title>
+<title>Social Detective 🔍 | MLPS1</title>
 <link href="https://fonts.googleapis.com/css2?family=Anton&family=Poppins:wght@400;500;600&display=swap" rel="stylesheet">
 <style>
   * { box-sizing:border-box; margin:0; padding:0; }
@@ -17,7 +17,7 @@
     min-height:100vh;
     padding-bottom:50px;
   }
-
+ 
   nav {
     display:flex; justify-content:space-between; align-items:center;
     padding:16px 6%;
@@ -26,7 +26,7 @@
   }
   nav h2 { font-family:'Anton', sans-serif; font-size:1.5rem; letter-spacing:0.03em; text-transform:uppercase; }
   nav small { font-size:0.75rem; opacity:0.7; }
-
+ 
   .hero {
     text-align:center;
     padding:50px 20px 20px;
@@ -56,17 +56,10 @@
   .highlight-marker{
     position:relative;
     display:inline-block;
-    color:#3b2f2f; /* Black text */
+    color:#3b2f2f;
     z-index:1;
 }
-
-.highlight-marker{
-    position:relative;
-    display:inline-block;
-    color:#3b2f2f; /* Black text */
-    z-index:1;
-}
-
+ 
 .highlight-marker::before{
     content:"";
     position:absolute;
@@ -74,29 +67,25 @@
     bottom:0;
     width:0%;
     height:1em;
-    background:#ff6b6b; /* Red highlight */
+    background:#ff6b6b;
     z-index:-1;
     border-radius:4px;
     animation:highlightSweep 1.2s ease-out forwards;
     animation-delay:0.3s;
 }
-
+ 
 @keyframes highlightSweep{
-    from{
-        width:0%;
-    }
-    to{
-        width:100%;
-    }
+    from{ width:0%; }
+    to{ width:100%; }
 }
-
+ 
   .hero p {
     max-width:460px;
     margin:0 auto;
     color:#6b5b4f;
     font-size:0.92rem;
   }
-
+ 
   .card {
     max-width:540px;
     margin:34px auto;
@@ -123,7 +112,7 @@
     border-bottom: 2px dashed #d8c9a3;
     padding-bottom:10px;
   }
-
+ 
   .form-group { margin-bottom:14px; }
   label { display:block; font-size:0.8rem; color:#8a7a6b; margin-bottom:5px; }
   input, textarea {
@@ -132,9 +121,8 @@
     background:#fffef9; color:#3b2f2f; font-family:'Poppins'; font-size:0.88rem;
   }
   input:focus, textarea:focus { outline:none; border-color:#c0392b; }
-
-  .readout{ font-size:0.75rem; color:#8a7a6b; margin-top:5px; min-height:14px; }
-
+  input[readonly] { background:#f3ede1; color:#6b5b4f; }
+ 
   select {
     width:100%; padding:10px 36px 10px 12px;
     border:1.5px solid #d8c9a3; border-radius:8px;
@@ -148,7 +136,7 @@
   select:focus { outline:none; border-color:#c0392b; }
   select option { font-family:'Poppins', sans-serif; color:#3b2f2f; background:#fffef9; }
   select:invalid { color:#8a7a6b; }
-
+ 
   .section-label {
     font-family:'Anton', sans-serif;
     font-size:0.85rem;
@@ -157,7 +145,7 @@
     color:#c0392b;
     margin:18px 0 10px;
   }
-
+ 
   .toggle-group { display:flex; gap:10px; }
   .toggle-btn {
     flex:1;
@@ -192,26 +180,63 @@
     background:#c0392b;
     box-shadow: inset 0 0 0 2.5px #fbeceb;
   }
-
-  .slider-row{ display:flex; align-items:center; gap:12px; }
-  input[type=range]{
-    flex:1; appearance:none; -webkit-appearance:none; height:6px; border-radius:3px;
-    background:linear-gradient(90deg, #c0392b var(--fill,50%), #d8c9a3 var(--fill,50%));
-    border:none; padding:0;
-  }
-  input[type=range]::-webkit-slider-thumb{
-    -webkit-appearance:none; appearance:none; width:18px; height:18px; border-radius:50%;
-    background:#fffef9; border:2.5px solid #c0392b; cursor:pointer;
-  }
-  input[type=range]::-moz-range-thumb{
-    width:18px; height:18px; border-radius:50%;
-    background:#fffef9; border:2.5px solid #c0392b; cursor:pointer;
-  }
-  .slider-val{ font-family:'Poppins'; font-size:0.85rem; color:#c0392b; font-weight:600; width:44px; text-align:right; }
-
+ 
   .two-col { display:grid; grid-template-columns:1fr 1fr; gap:12px; }
   @media(max-width:480px){ .two-col{grid-template-columns:1fr;} }
-
+ 
+  /* Slider styling */
+  .slider-row {
+    display:flex; align-items:center; gap:12px;
+  }
+  input[type="range"] {
+    -webkit-appearance:none; appearance:none;
+    flex:1;
+    height:6px;
+    border-radius:4px;
+    background:#e8dcc4;
+    padding:0;
+    border:none;
+    cursor:pointer;
+  }
+  input[type="range"]::-webkit-slider-thumb {
+    -webkit-appearance:none;
+    width:18px; height:18px;
+    border-radius:50%;
+    background:#c0392b;
+    border:2px solid #fffdf8;
+    box-shadow:0 0 0 1.5px #c0392b;
+    cursor:pointer;
+    margin-top:0;
+  }
+  input[type="range"]::-moz-range-thumb {
+    width:18px; height:18px;
+    border-radius:50%;
+    background:#c0392b;
+    border:2px solid #fffdf8;
+    box-shadow:0 0 0 1.5px #c0392b;
+    cursor:pointer;
+  }
+  input[type="range"]::-moz-range-track {
+    height:6px; border-radius:4px; background:#e8dcc4;
+  }
+  .slider-value {
+    min-width:46px;
+    text-align:center;
+    font-weight:600;
+    color:#c0392b;
+    font-size:0.85rem;
+    background:#fbeceb;
+    border-radius:6px;
+    padding:4px 6px;
+  }
+ 
+  .hint {
+    display:block;
+    font-size:0.72rem;
+    color:#8a7a6b;
+    margin-top:4px;
+  }
+ 
   button {
     width:100%; margin-top:8px; padding:13px;
     border:none; border-radius:10px;
@@ -223,7 +248,7 @@
   }
   button:hover { background:#a5321f; transform:translateY(-1px); }
   button:disabled { opacity:0.6; cursor:wait; }
-
+ 
   .result {
     display:none; margin-top:20px; padding:18px;
     border-radius:10px; text-align:center; border:2px dashed;
@@ -236,7 +261,7 @@
   .fake h2 { color:#c0392b; }
   .real { background:#eaf6ef; border-color:#2e8b57; }
   .real h2 { color:#2e8b57; }
-
+ 
   footer hr{
     width:80%;
     margin:18px auto;
@@ -244,14 +269,14 @@
     border-top:1px solid #d8c9a3;
     justify-content: center;
 }
-
+ 
 .team-heading{
-    color:#000000;          /* Red heading */
+    color:#000000;
     font-size:1.2rem;
     margin-bottom:12px;
     text-align:center;
 }
-
+ 
 .team-list{
     list-style:none;
     display:flex;
@@ -261,20 +286,20 @@
     padding:0;
     margin-bottom:15px;
 }
-
+ 
 .team-list li{
-    color:black  ;       /* Green names */
+    color:black;
     font-family:'Poppins',sans-serif;
     font-size:0.95rem;
     font-weight:600;
     transition:0.3s;
 }
-
+ 
 .team-list li:hover{
-    color:#c0392b;          /* Red on hover */
+    color:#c0392b;
     transform:translateY(-2px);
 }
-
+ 
 .footer-text{
     color:#8a7a6b;
     font-family:'Anton',sans-serif;
@@ -284,47 +309,48 @@
 </style>
 </head>
 <body>
-
+ 
 <nav>
   <h2>🔎 Social Detective</h2>
   <small>Hackathon Project</small>
 </nav>
-
+ 
 <div class="hero">
   <div class="magnifier">🔍</div>
-  
+ 
   <h1>
-    Catching <span class="highlight-marker">bot accounts</span><br>
+    Catching <span class="highlight-marker">fake accounts</span><br>
     red-handed
   </h1>
+  <p>Analyze social media profiles with Machine Learning and detect whether account is FAKE or REAL.</p>
 </div>
-
+ 
 <div class="card">
   <h3>Enter Suspect Details</h3>
   <form id="scanForm">
-
+ 
     <div class="two-col">
       <div class="form-group">
         <label>Account ID</label>
         <input type="text" id="accId" placeholder="e.g. ACC10293" required>
-        <div class="readout" id="handleReadout"></div>
       </div>
       <div class="form-group">
         <label>Platform</label>
         <select id="platform" required>
           <option value="" disabled selected>Select platform</option>
           <option value="instagram">Instagram</option>
-          <option value="X">X</option>
+          <option value="twitter">X</option>
         </select>
       </div>
     </div>
-
+ 
     <div class="form-group">
-      <label>Date Joined</label>
-      <input type="date" id="dateJoined" required>
-      <div class="readout" id="ageReadout"></div>
+      <label>Account Created On</label>
+      <input type="date" id="accCreatedDate" required>
+      <span class="hint" id="accAgeHint">Account age will be calculated automatically</span>
+      <input type="hidden" id="accAge">
     </div>
-
+ 
     <div class="section-label">Profile Signals</div>
     <div class="two-col">
       <div class="form-group">
@@ -336,6 +362,17 @@
         <input type="hidden" id="hasPfp">
       </div>
       <div class="form-group">
+        <label>Default Avatar?</label>
+        <div class="toggle-group" data-target="defaultAvatar">
+          <div class="toggle-btn" data-value="1">Yes</div>
+          <div class="toggle-btn" data-value="0">No</div>
+        </div>
+        <input type="hidden" id="defaultAvatar">
+      </div>
+    </div>
+ 
+    <div class="two-col">
+      <div class="form-group">
         <label>Has Bio?</label>
         <div class="toggle-group" data-target="hasBio">
           <div class="toggle-btn" data-value="1">Yes</div>
@@ -343,13 +380,25 @@
         </div>
         <input type="hidden" id="hasBio">
       </div>
+      <div class="form-group">
+        <label>Bio Length</label>
+        <input type="number" id="bioLength" step="any" placeholder="e.g. 45" min="0">
+      </div>
     </div>
-
-    <div class="form-group">
-      <label>Bio Length</label>
-      <input type="number" id="bioLength" step="any" placeholder="e.g. 45" min="0">
+ 
+    <div class="section-label">Username Signals</div>
+    <span class="hint" style="display:block;margin-bottom:10px;">Digit ratio &amp; length are calculated automatically from Account ID</span>
+    <div class="two-col">
+      <div class="form-group">
+        <label>Username Digit Ratio</label>
+        <input type="text" id="usernameDigitRatio" value="0" readonly>
+      </div>
+      <div class="form-group">
+        <label>Username Length</label>
+        <input type="text" id="usernameLength" value="0" readonly>
+      </div>
     </div>
-
+ 
     <div class="section-label">Network Signals</div>
     <div class="two-col">
       <div class="form-group">
@@ -361,24 +410,25 @@
         <input type="number" id="following" step="any" placeholder="e.g. 3400" min="0">
       </div>
     </div>
-
-    <div class="form-group">
-      <label>Verified?</label>
-      <div class="toggle-group" data-target="verified">
-        <div class="toggle-btn" data-value="1">Yes</div>
-        <div class="toggle-btn" data-value="0">No</div>
+ 
+    <div class="two-col">
+      <div class="form-group">
+        <label>Verified?</label>
+        <div class="toggle-group" data-target="verified">
+          <div class="toggle-btn" data-value="1">Yes</div>
+          <div class="toggle-btn" data-value="0">No</div>
+        </div>
+        <input type="hidden" id="verified">
       </div>
-      <input type="hidden" id="verified">
-    </div>
-
-    <div class="form-group">
-      <label>Profile Completeness</label>
-      <div class="slider-row">
-        <input type="range" id="profileCompleteness" min="0" max="100" value="50">
-        <span class="slider-val" id="profileCompletenessVal">50%</span>
+      <div class="form-group">
+        <label>Profile Completeness</label>
+        <div class="slider-row">
+          <input type="range" id="profileCompleteness" min="0" max="100" value="50">
+          <span class="slider-value" id="profileCompletenessValue">50%</span>
+        </div>
       </div>
     </div>
-
+ 
     <div class="section-label">Behavioral Signals</div>
     <div class="two-col">
       <div class="form-group">
@@ -386,119 +436,50 @@
         <input type="number" id="postRate" step="any" placeholder="e.g. 6.2" min="0">
       </div>
       <div class="form-group">
+        <label>Duplicate Post Content Ratio</label>
+        <div class="slider-row">
+          <input type="range" id="dupRatio" min="0" max="100" value="0">
+          <span class="slider-value" id="dupRatioValue">0%</span>
+        </div>
+      </div>
+    </div>
+ 
+    <div class="two-col">
+      <div class="form-group">
         <label>Avg Time Between Posts (mins)</label>
-        <input type="number" id="avgTimeBetweenPosts" placeholder="e.g. 25">
+        <input type="number" id="avgTimeBetweenPosts" step="any" placeholder="e.g. 25">
+      </div>
+      <div class="form-group">
+        <label>Device Fingerprint Diversity</label>
+        <input type="number" id="deviceDiversity" step="any" placeholder="e.g. 2" min="0">
       </div>
     </div>
-
-    <div class="form-group">
-      <label>Duplicate Post Content Ratio</label>
-      <div class="slider-row">
-        <input type="range" id="dupRatio" min="0" max="100" value="20">
-        <span class="slider-val" id="dupRatioVal">20%</span>
-      </div>
-    </div>
-
-    <div class="form-group">
-      <label>Device Fingerprint Diversity</label>
-      <input type="number" id="deviceDiversity" placeholder="e.g. 2" min="0">
-    </div>
-
-    <input type="hidden" id="usernameDigitRatio">
-    <input type="hidden" id="usernameLength">
-    <input type="hidden" id="accAge">
-
+ 
     <button type="submit" class="submit">Run Investigation 🕵️</button>
   </form>
-
+ 
   <div class="result" id="result"></div>
 </div>
-
+ 
 <footer>
-
+ 
     <hr>
-
+ 
     <h3 class="team-heading">Ctrl+Shift+n</h3>
-
+ 
     <ul class="team-list">
         <li>Dhanvin</li><br>
         <li>Atharva</li><br>
         <li>Ananya</li><br>
         <li>Hetvi</li><br>
     </ul>
-
+ 
     <hr>
-
+ 
+    <p class="footer-text">Made with HTML CSS Python & Machine Learning</p>
+ 
 </footer>
-<script>
-  // toggle buttons
-  document.querySelectorAll('.toggle-group').forEach(group=>{
-    const hidden = document.getElementById(group.dataset.target);
-    group.querySelectorAll('.toggle-btn').forEach(btn=>{
-      btn.addEventListener('click',()=>{
-        group.querySelectorAll('.toggle-btn').forEach(b=>b.classList.remove('active'));
-        btn.classList.add('active');
-        hidden.value = btn.dataset.value;
-      });
-    });
-  });
-
-  // auto-calc username signals from Account ID
-  const accId = document.getElementById('accId');
-  accId.addEventListener('input', ()=>{
-    const v = accId.value.trim();
-    const digits = (v.match(/\d/g)||[]).length;
-    const len = v.length;
-    const ratio = len ? +(digits/len).toFixed(2) : 0;
-    document.getElementById('usernameLength').value = len;
-    document.getElementById('usernameDigitRatio').value = ratio;
-    document.getElementById('handleReadout').textContent = len ? `${len} chars · ${(ratio*100).toFixed(0)}% digits` : '';
-  });
-
-  // date joined -> account age in days
-  const dateJoined = document.getElementById('dateJoined');
-  dateJoined.addEventListener('change', ()=>{
-    const chosen = new Date(dateJoined.value);
-    const days = Math.max(0, Math.floor((Date.now()-chosen)/86400000));
-    document.getElementById('accAge').value = days;
-    document.getElementById('ageReadout').textContent = `${days} day${days===1?'':'s'} since joining`;
-  });
-
-  // sliders
-  ['profileCompleteness','dupRatio'].forEach(id=>{
-    const el = document.getElementById(id);
-    const val = document.getElementById(id+'Val');
-    const update = ()=>{ val.textContent = el.value+'%'; el.style.setProperty('--fill', el.value+'%'); };
-    el.addEventListener('input', update); update();
-  });
-
-  // submit -> mock scoring (swap with real API call to your model backend)
-  const form = document.getElementById('scanForm');
-  form.addEventListener('submit', e=>{
-    e.preventDefault();
-    const btn = form.querySelector('.submit');
-    btn.disabled = true; btn.textContent = 'Scanning…';
-
-    const g = id => +(document.getElementById(id).value || 0);
-    let risk = 0;
-    if(!g('hasPfp')) risk += 15;
-    if(!g('hasBio')) risk += 8;
-    if(g('verified')) risk -= 25;
-    risk += g('usernameDigitRatio')*20;
-    risk += (g('dupRatio')/100)*30;
-    risk += (100-g('profileCompleteness'))*0.2;
-    if(g('following') > g('followers')*10) risk += 15;
-    if(g('accAge') < 30) risk += 10;
-    risk = Math.max(2, Math.min(98, Math.round(risk)));
-
-    setTimeout(()=>{
-      btn.disabled = false; btn.textContent = 'Run Investigation 🕵️';
-      const isFake = risk >= 50;
-      const result = document.getElementById('result');
-      result.className = 'result show ' + (isFake ? 'fake' : 'real');
-      result.innerHTML = `<h2>${isFake ? 'FAKE ACCOUNT' : 'LIKELY REAL'}</h2><p>Confidence score: ${risk}% risk</p>`;
-    }, 900);
-  });
-</script>
+<script src="script.js"></script>
 </body>
 </html>
+ 
